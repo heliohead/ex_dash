@@ -1,19 +1,16 @@
 defmodule ExDash do
   @moduledoc """
   ExDash provides a `Formatter` and mix task for converting your elixir project into a Dash docset.
-
   """
 
-  alias ExDash.{Injector,Docset,Store}
+  alias ExDash.{Injector, Docset, Store}
 
   @doc """
   A run function that is called by ExDoc.
-
   """
-  @spec run(list, ExDoc.Config.t) :: {list, ExDoc.Config.t}
+  @spec run(list, ExDoc.Config.t()) :: {list, ExDoc.Config.t()}
   def run(project_nodes, config) when is_map(config) do
-    name =
-      Store.get(:name)
+    name = Store.get(:name)
 
     config =
       cond do
@@ -27,8 +24,7 @@ defmodule ExDash do
           config
       end
 
-    {config, docset_root_path} =
-      Docset.build(project_nodes, config)
+    {config, docset_root_path} = Docset.build(project_nodes, config)
 
     ExDoc.Formatter.HTML.run(project_nodes, config)
 
@@ -47,5 +43,4 @@ defmodule ExDash do
   defp default_umbrella_project_name() do
     File.cwd!() |> Path.basename()
   end
-
 end
